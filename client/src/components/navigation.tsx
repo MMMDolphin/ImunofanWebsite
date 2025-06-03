@@ -113,31 +113,39 @@ export default function Navigation() {
             
             {/* Mega Menu for Applications */}
             <div 
-              className="relative"
+              className="relative group"
               onMouseEnter={() => setShowMegaMenu(true)}
               onMouseLeave={() => setShowMegaMenu(false)}
             >
-              <button className="flex items-center text-gray-600 hover:text-medical-blue transition-colors">
+              <button className="flex items-center text-gray-600 hover:text-medical-blue transition-colors py-2">
                 Приложения
                 <ChevronDown className="w-4 h-4 ml-1" />
               </button>
               
+              {/* Invisible bridge to prevent menu from closing */}
+              <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-6xl h-4 -mt-2 z-40"></div>
+              
               {showMegaMenu && (
-                <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-6xl bg-white shadow-2xl border border-gray-100 rounded-lg mt-2 p-8 z-50">
+                <div 
+                  className="absolute top-full left-1/2 transform -translate-x-1/2 w-screen max-w-6xl bg-white shadow-2xl border border-gray-100 rounded-lg mt-2 p-8 z-50"
+                  onMouseEnter={() => setShowMegaMenu(true)}
+                  onMouseLeave={() => setShowMegaMenu(false)}
+                >
                   <div className="grid grid-cols-3 gap-8">
                     {medicalApplications.map((field) => {
                       const IconComponent = field.icon;
                       return (
-                        <div key={field.id} className="group">
+                        <div key={field.id} className="group/field">
                           <Link 
                             href={`/applications/${field.id}`}
                             className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                            onClick={() => setShowMegaMenu(false)}
                           >
-                            <div className="w-10 h-10 bg-medical-blue/10 rounded-lg flex items-center justify-center group-hover:bg-medical-blue group-hover:text-white transition-colors">
-                              <IconComponent className="w-5 h-5 text-medical-blue group-hover:text-white" />
+                            <div className="w-10 h-10 bg-medical-blue/10 rounded-lg flex items-center justify-center group-hover/field:bg-medical-blue transition-colors">
+                              <IconComponent className="w-5 h-5 text-medical-blue group-hover/field:text-white" />
                             </div>
                             <div>
-                              <h4 className="font-semibold text-gray-900 group-hover:text-medical-blue">
+                              <h4 className="font-semibold text-gray-900 group-hover/field:text-medical-blue">
                                 {field.name}
                               </h4>
                             </div>
@@ -147,7 +155,8 @@ export default function Navigation() {
                               <Link
                                 key={index}
                                 href={`/applications/${field.id}#case-${index + 1}`}
-                                className="block text-sm text-gray-600 hover:text-medical-blue transition-colors pl-10 py-1"
+                                className="block text-sm text-gray-600 hover:text-medical-blue transition-colors pl-10 py-1 rounded"
+                                onClick={() => setShowMegaMenu(false)}
                               >
                                 • {useCase}
                               </Link>
@@ -165,7 +174,11 @@ export default function Navigation() {
                         <p className="text-sm text-gray-600">Открийте пълния списък с приложения</p>
                       </div>
                       <Link href="/applications">
-                        <Button variant="outline" className="border-medical-blue text-medical-blue hover:bg-medical-blue hover:text-white">
+                        <Button 
+                          variant="outline" 
+                          className="border-medical-blue text-medical-blue hover:bg-medical-blue hover:text-white"
+                          onClick={() => setShowMegaMenu(false)}
+                        >
                           Виж всички
                         </Button>
                       </Link>
