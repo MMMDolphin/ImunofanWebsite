@@ -42,12 +42,9 @@ export default function Navigation() {
             >
               Наука
             </button>
-            <button 
-              onClick={() => scrollToSection('applications')}
-              className="text-gray-600 hover:text-medical-blue transition-colors"
-            >
+            <Link href="/applications" className="text-gray-600 hover:text-medical-blue transition-colors">
               Приложения
-            </button>
+            </Link>
             <button 
               onClick={() => scrollToSection('testimonials')}
               className="text-gray-600 hover:text-medical-blue transition-colors"
