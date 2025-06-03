@@ -172,6 +172,30 @@ export default function AdminDashboard() {
           })}
         </div>
 
+        {/* SEO Strategy Writer Card */}
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <TrendingUp className="w-5 h-5" />
+              SEO Strategy Writer
+            </CardTitle>
+            <CardDescription>
+              Generate AI-powered SEO content and images using OpenAI GPT-4o
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+              Upload CSV files with keywords and intents to automatically generate SEO-optimized pages with custom content and images for Imunofan pharmaceutical products.
+            </p>
+            <Button
+              onClick={() => window.location.href = "/admin/seo-strategy"}
+              className="bg-blue-600 hover:bg-blue-700 text-white"
+            >
+              Open SEO Strategy Writer
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* Product Management */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>

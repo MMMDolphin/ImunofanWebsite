@@ -92,8 +92,8 @@ export async function generateSeoImages(keyword: string, intent: string): Promis
     ]);
 
     return {
-      image1Url: image1Response.data[0].url || "",
-      image2Url: image2Response.data[0].url || ""
+      image1Url: image1Response.data?.[0]?.url || "",
+      image2Url: image2Response.data?.[0]?.url || ""
     };
   } catch (error) {
     console.error("Error generating SEO images:", error);

@@ -10,6 +10,7 @@ import Applications from "@/pages/applications";
 import ApplicationsIndex from "@/pages/applications-index";
 import AdminLogin from "@/pages/admin-login";
 import AdminDashboard from "@/pages/admin-dashboard";
+import SeoStrategyWriter from "@/pages/seo-strategy-writer";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -22,6 +23,7 @@ function Router() {
       <Route path="/applications/:field" component={Applications} />
       <Route path="/admin" component={AdminLogin} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
+      <Route path="/admin/seo-strategy" component={SeoStrategyWriter} />
       <Route component={NotFound} />
     </Switch>
   );
