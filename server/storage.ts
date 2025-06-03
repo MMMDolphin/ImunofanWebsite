@@ -1,4 +1,4 @@
-import { products, orders, orderItems, admins, seoKeywords, seoPages, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type Admin, type InsertAdmin, type SeoKeyword, type InsertSeoKeyword, type SeoPage, type InsertSeoPage } from "@shared/schema";
+import { products, orders, orderItems, admins, seoKeywords, seoPages, seoSettings, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type Admin, type InsertAdmin, type SeoKeyword, type InsertSeoKeyword, type SeoPage, type InsertSeoPage, type SeoSettings, type InsertSeoSettings } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -30,6 +30,13 @@ export interface IStorage {
   getSeoPages(): Promise<SeoPage[]>;
   getSeoPageByKeywordId(keywordId: number): Promise<SeoPage | undefined>;
   updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage>;
+  
+  // SEO Settings
+  getSeoSettings(): Promise<SeoSettings | undefined>;
+  updateSeoSettings(updates: Partial<InsertSeoSettings>): Promise<SeoSettings>;
+  incrementPagesCreatedToday(): Promise<SeoSettings>;
+  resetDailyCount(): Promise<SeoSettings>;
+  canCreatePageToday(): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -109,6 +116,118 @@ export class DatabaseStorage implements IStorage {
   async updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage> {
     const [page] = await db.update(seoPages).set(updates).where(eq(seoPages.id, id)).returning();
     return page;
+  }
+
+  // SEO Settings
+  async getSeoSettings(): Promise<SeoSettings | undefined> {
+    const [settings] = await db.select().from(seoSettings).limit(1);
+    return settings;
+  }
+
+  async updateSeoSettings(updates: Partial<InsertSeoSettings>): Promise<SeoSettings> {
+    let settings = await this.getSeoSettings();
+    
+    if (!settings) {
+      const [newSettings] = await db
+        .insert(seoSettings)
+        .values({
+          dailyPageLimit: updates.dailyPageLimit || 10,
+          pagesCreatedToday: 0,
+          autoGeneration: updates.autoGeneration !== undefined ? updates.autoGeneration : true,
+          lastResetDate: new Date(),
+        })
+        .returning();
+      return newSettings;
+    }
+
+    const [updatedSettings] = await db
+      .update(seoSettings)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(seoSettings.id, settings.id))
+      .returning();
+    return updatedSettings;
+  }
+
+  async incrementPagesCreatedToday(): Promise<SeoSettings> {
+    let settings = await this.getSeoSettings();
+    
+    if (!settings) {
+      const [newSettings] = await db
+        .insert(seoSettings)
+        .values({
+          dailyPageLimit: 10,
+          pagesCreatedToday: 1,
+          autoGeneration: true,
+          lastResetDate: new Date(),
+        })
+        .returning();
+      return newSettings;
+    }
+
+    const today = new Date();
+    const lastReset = new Date(settings.lastResetDate!);
+    const isNewDay = today.toDateString() !== lastReset.toDateString();
+
+    const [updatedSettings] = await db
+      .update(seoSettings)
+      .set({
+        pagesCreatedToday: isNewDay ? 1 : settings.pagesCreatedToday + 1,
+        lastResetDate: isNewDay ? today : settings.lastResetDate,
+        updatedAt: new Date(),
+      })
+      .where(eq(seoSettings.id, settings.id))
+      .returning();
+    return updatedSettings;
+  }
+
+  async resetDailyCount(): Promise<SeoSettings> {
+    let settings = await this.getSeoSettings();
+    
+    if (!settings) {
+      const [newSettings] = await db
+        .insert(seoSettings)
+        .values({
+          dailyPageLimit: 10,
+          pagesCreatedToday: 0,
+          autoGeneration: true,
+          lastResetDate: new Date(),
+        })
+        .returning();
+      return newSettings;
+    }
+
+    const [updatedSettings] = await db
+      .update(seoSettings)
+      .set({
+        pagesCreatedToday: 0,
+        lastResetDate: new Date(),
+        updatedAt: new Date(),
+      })
+      .where(eq(seoSettings.id, settings.id))
+      .returning();
+    return updatedSettings;
+  }
+
+  async canCreatePageToday(): Promise<boolean> {
+    const settings = await this.getSeoSettings();
+    
+    if (!settings) {
+      return true;
+    }
+
+    const today = new Date();
+    const lastReset = new Date(settings.lastResetDate!);
+    const isNewDay = today.toDateString() !== lastReset.toDateString();
+
+    if (isNewDay) {
+      await this.resetDailyCount();
+      return true;
+    }
+
+    return settings.pagesCreatedToday < settings.dailyPageLimit;
   }
 }
 

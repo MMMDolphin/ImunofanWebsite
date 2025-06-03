@@ -74,6 +74,16 @@ export const seoPages = pgTable("seo_pages", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// SEO settings and daily limits
+export const seoSettings = pgTable("seo_settings", {
+  id: serial("id").primaryKey(),
+  dailyPageLimit: integer("daily_page_limit").notNull().default(10),
+  pagesCreatedToday: integer("pages_created_today").notNull().default(0),
+  lastResetDate: timestamp("last_reset_date").defaultNow(),
+  autoGeneration: boolean("auto_generation").notNull().default(true),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -112,11 +122,21 @@ export const insertSeoPageSchema = createInsertSchema(seoPages).omit({
   updatedAt: true,
 });
 
+export const insertSeoSettingsSchema = createInsertSchema(seoSettings).omit({
+  id: true,
+  updatedAt: true,
+});
+
 export const csvUploadSchema = z.object({
   keywords: z.array(z.object({
     keyword: z.string().min(1, "Keyword is required"),
     intent: z.string().min(1, "Intent is required"),
   })),
+});
+
+export const seoSettingsUpdateSchema = z.object({
+  dailyPageLimit: z.number().min(1).max(100).optional(),
+  autoGeneration: z.boolean().optional(),
 });
 
 export type Product = typeof products.$inferSelect;
@@ -134,4 +154,7 @@ export type SeoKeyword = typeof seoKeywords.$inferSelect;
 export type InsertSeoKeyword = z.infer<typeof insertSeoKeywordSchema>;
 export type SeoPage = typeof seoPages.$inferSelect;
 export type InsertSeoPage = z.infer<typeof insertSeoPageSchema>;
+export type SeoSettings = typeof seoSettings.$inferSelect;
+export type InsertSeoSettings = z.infer<typeof insertSeoSettingsSchema>;
 export type CsvUpload = z.infer<typeof csvUploadSchema>;
+export type SeoSettingsUpdate = z.infer<typeof seoSettingsUpdateSchema>;
