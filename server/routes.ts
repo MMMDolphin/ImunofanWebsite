@@ -305,6 +305,72 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Public SEO page routes for symptoms
+  app.get("/simptomi/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      const pages = await storage.getSeoPages();
+      const page = pages.find(p => p.slug === `simptomi/${slug}` && p.published);
+      
+      if (!page) {
+        return res.status(404).send("Page not found");
+      }
+
+      // Serve the symptom page with proper meta tags
+      const html = `
+        <!DOCTYPE html>
+        <html lang="bg">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${page.title}</title>
+          <meta name="description" content="${page.metaDescription}">
+          <meta property="og:title" content="${page.title}">
+          <meta property="og:description" content="${page.metaDescription}">
+          <meta property="og:image" content="${page.image1Url}">
+          <style>
+            body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+            h1 { color: #0066cc; border-bottom: 2px solid #00d4aa; padding-bottom: 10px; }
+            img { max-width: 100%; height: auto; margin: 20px 0; border-radius: 8px; }
+            .meta { color: #666; font-size: 14px; margin-bottom: 20px; }
+            .content { font-size: 16px; color: #333; }
+          </style>
+        </head>
+        <body>
+          <div class="meta">Имунофан • Симптоми и лечение</div>
+          <h1>${page.title}</h1>
+          ${page.image1Url ? `<img src="${page.image1Url}" alt="${page.title}">` : ''}
+          <div class="content">${page.content.replace(/\n/g, '<br>')}</div>
+          ${page.image2Url ? `<img src="${page.image2Url}" alt="Лечение с Имунофан">` : ''}
+        </body>
+        </html>
+      `;
+      
+      res.send(html);
+    } catch (error) {
+      console.error("Error serving symptom page:", error);
+      res.status(500).send("Server error");
+    }
+  });
+
+  // API to get published symptom pages for navigation
+  app.get("/api/simptomi", async (req, res) => {
+    try {
+      const pages = await storage.getSeoPages();
+      const publishedPages = pages
+        .filter(page => page.published)
+        .map(page => ({
+          title: page.title,
+          slug: page.slug,
+          url: `/${page.slug}`
+        }));
+      res.json(publishedPages);
+    } catch (error) {
+      console.error("Error fetching symptom pages:", error);
+      res.status(500).json({ message: "Failed to fetch symptom pages" });
+    }
+  });
+
   app.post("/api/admin/seo/generate-single", requireAuth, async (req, res) => {
     try {
       const result = insertSeoKeywordSchema.safeParse(req.body);
@@ -334,9 +400,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         generateSeoImages(keyword, intent)
       ]);
 
-      // Create SEO page
+      // Create SEO page with slug  
       const seoPage = await storage.createSeoPage({
         keywordId: seoKeyword.id,
+        slug: `simptomi/${seoKeyword.slug}`,
         title: content.title,
         metaDescription: content.metaDescription,
         content: content.content,

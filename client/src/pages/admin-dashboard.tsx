@@ -350,7 +350,7 @@ export default function AdminDashboard() {
                         <TableRow>
                           <TableHead>ID</TableHead>
                           <TableHead>Title</TableHead>
-                          <TableHead>Meta Description</TableHead>
+                          <TableHead>URL/Slug</TableHead>
                           <TableHead>Published</TableHead>
                           <TableHead>Created</TableHead>
                         </TableRow>
@@ -360,7 +360,20 @@ export default function AdminDashboard() {
                           <TableRow key={page.id}>
                             <TableCell className="font-medium">{page.id}</TableCell>
                             <TableCell className="max-w-xs truncate">{page.title}</TableCell>
-                            <TableCell className="max-w-sm truncate">{page.metaDescription}</TableCell>
+                            <TableCell>
+                              {page.slug ? (
+                                <a 
+                                  href={`/${page.slug}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 hover:text-blue-800 underline font-mono text-sm"
+                                >
+                                  /{page.slug}
+                                </a>
+                              ) : (
+                                <span className="text-gray-400">No slug</span>
+                              )}
+                            </TableCell>
                             <TableCell>
                               <span className={`px-2 py-1 rounded-full text-xs ${
                                 page.published 
@@ -462,6 +475,87 @@ export default function AdminDashboard() {
                     >
                       <RotateCcw className="w-4 h-4 mr-2" />
                       {resetDailyMutation.isPending ? 'Resetting...' : 'Reset Daily Count'}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* AI Content Generation Settings */}
+                <div className="space-y-4 border-t pt-6">
+                  <h3 className="text-lg font-medium">AI Content Generation for Symptoms</h3>
+                  
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="aiPrompt">AI Prompt Template</Label>
+                      <textarea
+                        id="aiPrompt"
+                        className="w-full min-h-[100px] p-3 border rounded-md resize-y"
+                        placeholder="За {keyword}: Създайте професионален медицински текст за симптомите и лечението с Имунофан пептиди..."
+                        defaultValue={seoSettings?.aiPromptTemplate || "За {keyword}: Създайте професионален медицински текст за симптомите и лечението с Имунофан пептиди. Фокусирайте се върху {intent}. Включете препоръки за използване на българската фармацевтична продукция."}
+                      />
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        Use {'{keyword}'} and {'{intent}'} as placeholders for dynamic content
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="aiTone">Content Tone</Label>
+                        <select
+                          id="aiTone"
+                          className="w-full p-2 border rounded-md"
+                          defaultValue={seoSettings?.aiTone || "professional"}
+                        >
+                          <option value="professional">Professional</option>
+                          <option value="empathetic">Empathetic</option>
+                          <option value="authoritative">Authoritative</option>
+                          <option value="conversational">Conversational</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="aiLength">Content Length</Label>
+                        <select
+                          id="aiLength"
+                          className="w-full p-2 border rounded-md"
+                          defaultValue={seoSettings?.aiLength || "detailed"}
+                        >
+                          <option value="concise">Concise (300-500 words)</option>
+                          <option value="detailed">Detailed (500-800 words)</option>
+                          <option value="comprehensive">Comprehensive (800+ words)</option>
+                        </select>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="aiLanguage">Language</Label>
+                        <select
+                          id="aiLanguage"
+                          className="w-full p-2 border rounded-md"
+                          defaultValue={seoSettings?.aiLanguage || "bulgarian"}
+                        >
+                          <option value="bulgarian">Bulgarian</option>
+                          <option value="english">English</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => {
+                        const aiPrompt = (document.getElementById('aiPrompt') as HTMLTextAreaElement)?.value;
+                        const aiTone = (document.getElementById('aiTone') as HTMLSelectElement)?.value;
+                        const aiLength = (document.getElementById('aiLength') as HTMLSelectElement)?.value;
+                        const aiLanguage = (document.getElementById('aiLanguage') as HTMLSelectElement)?.value;
+                        
+                        updateSettingsMutation.mutate({
+                          aiPromptTemplate: aiPrompt,
+                          aiTone,
+                          aiLength,
+                          aiLanguage
+                        });
+                      }}
+                      disabled={updateSettingsMutation.isPending}
+                      className="w-full md:w-auto"
+                    >
+                      Update AI Settings
                     </Button>
                   </div>
                 </div>
