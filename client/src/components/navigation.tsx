@@ -97,12 +97,13 @@ export default function Navigation() {
             >
               Наука
             </button>
-            <button 
-              onClick={() => scrollToSection('applications')}
+            <Link 
+              href="/applications" 
               className="block w-full text-left px-3 py-2 text-gray-600 hover:text-medical-blue"
+              onClick={() => setIsMenuOpen(false)}
             >
               Приложения
-            </button>
+            </Link>
             <button 
               onClick={() => scrollToSection('testimonials')}
               className="block w-full text-left px-3 py-2 text-gray-600 hover:text-medical-blue"
