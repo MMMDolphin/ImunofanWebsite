@@ -133,7 +133,7 @@ export default function ApplicationsIndex() {
       
       <div className="pt-20">
         {/* Hero Section */}
-        <section className="py-16 bg-gradient-to-r from-medical-blue to-biotech-teal text-white">
+        <section className="py-16 gradient-medical text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="font-montserrat text-4xl lg:text-6xl font-bold mb-6">
               Медицински приложения
@@ -143,15 +143,15 @@ export default function ApplicationsIndex() {
               своя уникален механизъм на модулиране на имунната система
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="text-center">
+              <div className="text-center glass-effect rounded-lg p-4">
                 <div className="text-4xl font-bold mb-2">50+</div>
                 <div className="text-lg opacity-80">различни заболявания</div>
               </div>
-              <div className="text-center">
+              <div className="text-center glass-effect rounded-lg p-4">
                 <div className="text-4xl font-bold mb-2">13</div>
                 <div className="text-lg opacity-80">медицински области</div>
               </div>
-              <div className="text-center">
+              <div className="text-center glass-effect rounded-lg p-4">
                 <div className="text-4xl font-bold mb-2">25+</div>
                 <div className="text-lg opacity-80">години клинична практика</div>
               </div>

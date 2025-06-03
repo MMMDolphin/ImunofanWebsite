@@ -516,7 +516,7 @@ export default function Applications() {
             
             <div className="space-y-8">
               {fieldData.useCases.map((useCase: any, index: number) => (
-                <Card key={index} className="overflow-hidden">
+                <Card key={index} id={`case-${index + 1}`} className="overflow-hidden scroll-mt-24">
                   <CardHeader className={`bg-gradient-to-r ${fieldData.color}`}>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
