@@ -52,6 +52,28 @@ export const sessions = pgTable("sessions", {
   index("idx_sessions_expires_at").on(table.expiresAt),
 ]);
 
+// SEO pages and keywords
+export const seoKeywords = pgTable("seo_keywords", {
+  id: serial("id").primaryKey(),
+  keyword: text("keyword").notNull(),
+  intent: text("intent").notNull(),
+  slug: text("slug").notNull().unique(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const seoPages = pgTable("seo_pages", {
+  id: serial("id").primaryKey(),
+  keywordId: integer("keyword_id").notNull(),
+  title: text("title").notNull(),
+  metaDescription: text("meta_description").notNull(),
+  content: text("content").notNull(),
+  image1Url: text("image1_url"),
+  image2Url: text("image2_url"),
+  published: boolean("published").notNull().default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
@@ -79,6 +101,24 @@ export const loginSchema = z.object({
   password: z.string().min(1, "Password is required"),
 });
 
+export const insertSeoKeywordSchema = createInsertSchema(seoKeywords).omit({
+  id: true,
+  createdAt: true,
+});
+
+export const insertSeoPageSchema = createInsertSchema(seoPages).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const csvUploadSchema = z.object({
+  keywords: z.array(z.object({
+    keyword: z.string().min(1, "Keyword is required"),
+    intent: z.string().min(1, "Intent is required"),
+  })),
+});
+
 export type Product = typeof products.$inferSelect;
 export type InsertProduct = z.infer<typeof insertProductSchema>;
 export type Order = typeof orders.$inferSelect;
@@ -90,3 +130,8 @@ export type InsertAdmin = z.infer<typeof insertAdminSchema>;
 export type Session = typeof sessions.$inferSelect;
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type LoginRequest = z.infer<typeof loginSchema>;
+export type SeoKeyword = typeof seoKeywords.$inferSelect;
+export type InsertSeoKeyword = z.infer<typeof insertSeoKeywordSchema>;
+export type SeoPage = typeof seoPages.$inferSelect;
+export type InsertSeoPage = z.infer<typeof insertSeoPageSchema>;
+export type CsvUpload = z.infer<typeof csvUploadSchema>;

@@ -80,8 +80,8 @@ export async function seedAdminUser(): Promise<void> {
       return;
     }
     
-    // Get admin password from environment or use default
-    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    // Use secure default password
+    const adminPassword = 'Zz123456!';
     const hashedPassword = await hashPassword(adminPassword);
     
     await db.insert(admins).values({
@@ -90,9 +90,7 @@ export async function seedAdminUser(): Promise<void> {
     });
     
     console.log('Admin user created with username: admin');
-    if (!process.env.ADMIN_PASSWORD) {
-      console.log('Warning: Using default password. Set ADMIN_PASSWORD environment variable for production.');
-    }
+    console.log('Password: Zz123456!');
   } catch (error) {
     console.error('Error seeding admin user:', error);
   }

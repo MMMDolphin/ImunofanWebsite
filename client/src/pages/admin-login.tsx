@@ -131,7 +131,7 @@ export default function AdminLogin() {
             <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
               <strong>Default Credentials:</strong><br />
               Username: admin<br />
-              Password: admin123
+              Password: Zz123456!
             </p>
           </div>
         </CardContent>
