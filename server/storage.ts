@@ -366,6 +366,27 @@ export class MemStorage implements IStorage {
   async updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage> {
     throw new Error("SEO operations not supported in MemStorage");
   }
+
+  // SEO Settings - not supported in MemStorage
+  async getSeoSettings(): Promise<SeoSettings | undefined> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async updateSeoSettings(updates: Partial<InsertSeoSettings>): Promise<SeoSettings> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async incrementPagesCreatedToday(): Promise<SeoSettings> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async resetDailyCount(): Promise<SeoSettings> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async canCreatePageToday(): Promise<boolean> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
 }
 
 export const storage = new DatabaseStorage();

@@ -272,6 +272,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // SEO Settings Management
+  app.get("/api/admin/seo/settings", requireAuth, async (req, res) => {
+    try {
+      const settings = await storage.getSeoSettings();
+      res.json(settings);
+    } catch (error) {
+      console.error("Error fetching SEO settings:", error);
+      res.status(500).json({ message: "Failed to fetch SEO settings" });
+    }
+  });
+
+  app.patch("/api/admin/seo/settings", requireAuth, async (req, res) => {
+    try {
+      const updates = req.body;
+      const updatedSettings = await storage.updateSeoSettings(updates);
+      res.json(updatedSettings);
+    } catch (error) {
+      console.error("Error updating SEO settings:", error);
+      res.status(500).json({ message: "Failed to update SEO settings" });
+    }
+  });
+
+  app.post("/api/admin/seo/reset-daily", requireAuth, async (req, res) => {
+    try {
+      const settings = await storage.resetDailyCount();
+      res.json(settings);
+    } catch (error) {
+      console.error("Error resetting daily count:", error);
+      res.status(500).json({ message: "Failed to reset daily count" });
+    }
+  });
+
   app.post("/api/admin/seo/generate-single", requireAuth, async (req, res) => {
     try {
       const result = insertSeoKeywordSchema.safeParse(req.body);

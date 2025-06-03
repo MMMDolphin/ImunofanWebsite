@@ -1,15 +1,22 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Switch } from "@/components/ui/switch";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
-import { Shield, LogOut, Package, ShoppingCart, Users, TrendingUp } from "lucide-react";
+import { Shield, LogOut, Package, ShoppingCart, Users, TrendingUp, Settings, FileText, RotateCcw } from "lucide-react";
 
 export default function AdminDashboard() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const [dailyLimit, setDailyLimit] = useState(10);
+  const [autoGeneration, setAutoGeneration] = useState(true);
 
   // Check if admin is authenticated
   const { data: admin, isLoading, error } = useQuery({
@@ -22,7 +29,24 @@ export default function AdminDashboard() {
     queryKey: ["/api/products"],
   });
 
+  // Get SEO keywords
+  const { data: keywords = [] } = useQuery({
+    queryKey: ["/api/admin/seo/keywords"],
+  });
+
+  // Get SEO pages
+  const { data: pages = [] } = useQuery({
+    queryKey: ["/api/admin/seo/pages"],
+  });
+
+  // Get SEO settings
+  const { data: seoSettings } = useQuery({
+    queryKey: ["/api/admin/seo/settings"],
+  });
+
   const typedProducts = products as any[];
+  const typedKeywords = keywords as any[];
+  const typedPages = pages as any[];
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -37,6 +61,54 @@ export default function AdminDashboard() {
       }, 1000);
     }
   }, [admin, isLoading, error, setLocation, toast]);
+
+  // Update SEO settings
+  const updateSettingsMutation = useMutation({
+    mutationFn: async (updates: any) => {
+      return await apiRequest("/api/admin/seo/settings", {
+        method: "PATCH",
+        body: JSON.stringify(updates),
+        headers: { "Content-Type": "application/json" },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/seo/settings"] });
+      toast({
+        title: "Settings Updated",
+        description: "SEO settings have been updated successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to update settings",
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Reset daily count
+  const resetDailyMutation = useMutation({
+    mutationFn: async () => {
+      return await apiRequest("/api/admin/seo/reset-daily", {
+        method: "POST",
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/seo/settings"] });
+      toast({
+        title: "Daily Count Reset",
+        description: "Daily page creation count has been reset to 0",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to reset daily count",
+        variant: "destructive",
+      });
+    },
+  });
 
   const logoutMutation = useMutation({
     mutationFn: async () => {
