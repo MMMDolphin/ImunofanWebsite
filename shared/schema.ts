@@ -65,6 +65,7 @@ export const seoPages = pgTable("seo_pages", {
   id: serial("id").primaryKey(),
   keywordId: integer("keyword_id").notNull(),
   title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
   metaDescription: text("meta_description").notNull(),
   content: text("content").notNull(),
   image1Url: text("image1_url"),
@@ -81,6 +82,11 @@ export const seoSettings = pgTable("seo_settings", {
   pagesCreatedToday: integer("pages_created_today").notNull().default(0),
   lastResetDate: timestamp("last_reset_date").defaultNow(),
   autoGeneration: boolean("auto_generation").notNull().default(true),
+  // AI Generation Settings
+  aiPromptTemplate: text("ai_prompt_template").default("За {keyword}: Създайте професионален медицински текст за симптомите и лечението с Имунофан пептиди. Фокусирайте се върху {intent}. Включете препоръки за използване на българската фармацевтична продукция."),
+  aiTone: text("ai_tone").default("professional"),
+  aiLength: text("ai_length").default("detailed"),
+  aiLanguage: text("ai_language").default("bulgarian"),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 

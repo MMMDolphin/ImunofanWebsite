@@ -210,9 +210,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             generateSeoImages(keyword, intent)
           ]);
 
-          // Create SEO page
+          // Create SEO page with slug
           await storage.createSeoPage({
             keywordId: seoKeyword.id,
+            slug: `simptomi/${slug}`,
             title: content.title,
             metaDescription: content.metaDescription,
             content: content.content,
