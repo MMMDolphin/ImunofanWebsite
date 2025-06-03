@@ -1,4 +1,6 @@
-import { products, orders, orderItems, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem } from "@shared/schema";
+import { products, orders, orderItems, admins, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type Admin, type InsertAdmin } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 
 export interface IStorage {
   // Products
@@ -13,6 +15,10 @@ export interface IStorage {
   // Order Items
   createOrderItem(orderItem: InsertOrderItem): Promise<OrderItem>;
   getOrderItems(orderId: number): Promise<OrderItem[]>;
+  
+  // Admin
+  getAdminByUsername(username: string): Promise<Admin | undefined>;
+  createAdmin(admin: InsertAdmin): Promise<Admin>;
 }
 
 export class MemStorage implements IStorage {
