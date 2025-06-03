@@ -6,6 +6,54 @@ import { insertOrderSchema, insertOrderItemSchema, loginSchema } from "@shared/s
 import { z } from "zod";
 import { verifyPassword, createSession, deleteSession, requireAuth, seedAdminUser, cleanExpiredSessions } from "./auth";
 
+async function seedProducts() {
+  try {
+    const existingProducts = await storage.getProducts();
+    if (existingProducts.length > 0) {
+      console.log("Products already seeded");
+      return;
+    }
+
+    const defaultProducts = [
+      {
+        name: "Инжекционен разтвор",
+        description: "Най-ефективната форма за директно въздействие. Иммунофан инжекции осигуряват максимална биодостъпност и бързо въздействие върху имунната система.",
+        price: "89.99",
+        type: "injection",
+        image: "https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        features: ["Максимална биодостъпност", "Бързо въздействие", "Професионално приложение", "Точна дозировка"],
+        inStock: true
+      },
+      {
+        name: "Назален спрей",
+        description: "Удобна и ефективна форма за ежедневна употреба. Назалният спрей позволява лесно приложение и добра абсорбция през назалната лигавица.",
+        price: "59.99",
+        type: "nasal",
+        image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        features: ["Лесно приложение", "Ежедневна употреба", "Добра абсорбция", "Портативен формат"],
+        inStock: true
+      },
+      {
+        name: "Супозитории",
+        description: "Алтернативна форма за пациенти, които не могат да използват инжекции. Супозиториите осигуряват стабилна абсорбция и продължително въздействие.",
+        price: "69.99",
+        type: "suppository",
+        image: "https://images.unsplash.com/photo-1471864190281-a93a3070b6de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        features: ["Стабилна абсорбция", "Продължително въздействие", "Алтернативен метод", "Удобно съхранение"],
+        inStock: true
+      }
+    ];
+
+    for (const product of defaultProducts) {
+      await storage.createProduct(product);
+    }
+
+    console.log("Products seeded successfully");
+  } catch (error) {
+    console.error("Error seeding products:", error);
+  }
+}
+
 const createOrderWithItemsSchema = z.object({
   order: insertOrderSchema,
   items: z.array(insertOrderItemSchema),
@@ -17,6 +65,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Initialize admin user and clean expired sessions
   await seedAdminUser();
+  await seedProducts();
   setInterval(cleanExpiredSessions, 60 * 60 * 1000); // Clean every hour
 
   // Authentication routes
