@@ -1,0 +1,123 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 250 11% 98%; /* #FAFBFC */
+  --foreground: 210 14% 10%; /* #1A1D23 */
+  --muted: 210 11% 96%; /* #F3F4F6 */
+  --muted-foreground: 210 7% 45%; /* #6B7280 */
+  --popover: 0 0% 100%; /* #FFFFFF */
+  --popover-foreground: 210 14% 10%; /* #1A1D23 */
+  --card: 0 0% 100%; /* #FFFFFF */
+  --card-foreground: 210 14% 10%; /* #1A1D23 */
+  --border: 220 5% 90%; /* #E5E7EB */
+  --input: 220 5% 90%; /* #E5E7EB */
+  --primary: 210 100% 40%; /* #0066CC */
+  --primary-foreground: 210 100% 98%; /* #F0F9FF */
+  --secondary: 174 100% 41%; /* #00D4AA */
+  --secondary-foreground: 174 100% 10%; /* #003D32 */
+  --accent: 15 100% 60%; /* #FF6B35 */
+  --accent-foreground: 15 100% 98%; /* #FFF7F5 */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 98%; /* #FAFAFA */
+  --ring: 210 100% 40%; /* #0066CC */
+  --trust: 142 76% 36%; /* #34C759 */
+  --trust-foreground: 142 76% 98%; /* #F0FDF4 */
+  --radius: 0.75rem;
+}
+
+.dark {
+  --background: 210 14% 10%; /* #1A1D23 */
+  --foreground: 250 11% 98%; /* #FAFBFC */
+  --muted: 210 14% 15%; /* #2A2E35 */
+  --muted-foreground: 210 7% 65%; /* #9CA3AF */
+  --popover: 210 14% 10%; /* #1A1D23 */
+  --popover-foreground: 250 11% 98%; /* #FAFBFC */
+  --card: 210 14% 10%; /* #1A1D23 */
+  --card-foreground: 250 11% 98%; /* #FAFBFC */
+  --border: 210 14% 20%; /* #374151 */
+  --input: 210 14% 20%; /* #374151 */
+  --primary: 210 100% 40%; /* #0066CC */
+  --primary-foreground: 210 100% 98%; /* #F0F9FF */
+  --secondary: 174 100% 41%; /* #00D4AA */
+  --secondary-foreground: 174 100% 10%; /* #003D32 */
+  --accent: 15 100% 60%; /* #FF6B35 */
+  --accent-foreground: 15 100% 98%; /* #FFF7F5 */
+  --destructive: 0 84% 60%; /* #EF4444 */
+  --destructive-foreground: 0 0% 98%; /* #FAFAFA */
+  --ring: 210 100% 40%; /* #0066CC */
+  --trust: 142 76% 36%; /* #34C759 */
+  --trust-foreground: 142 76% 98%; /* #F0FDF4 */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-source antialiased;
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-montserrat {
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  .font-source {
+    font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+
+  .text-trust {
+    color: hsl(var(--trust));
+  }
+
+  .bg-trust {
+    background-color: hsl(var(--trust));
+  }
+
+  .border-trust {
+    border-color: hsl(var(--trust));
+  }
+
+  .bg-medical-blue {
+    background-color: hsl(var(--primary));
+  }
+
+  .text-medical-blue {
+    color: hsl(var(--primary));
+  }
+
+  .bg-biotech-teal {
+    background-color: hsl(var(--secondary));
+  }
+
+  .text-biotech-teal {
+    color: hsl(var(--secondary));
+  }
+
+  .bg-energy-orange {
+    background-color: hsl(var(--accent));
+  }
+
+  .text-energy-orange {
+    color: hsl(var(--accent));
+  }
+
+  .gradient-medical {
+    background: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 100%);
+  }
+
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+}
