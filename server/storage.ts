@@ -21,6 +21,51 @@ export interface IStorage {
   createAdmin(admin: InsertAdmin): Promise<Admin>;
 }
 
+export class DatabaseStorage implements IStorage {
+  async getProducts(): Promise<Product[]> {
+    return await db.select().from(products);
+  }
+
+  async getProduct(id: number): Promise<Product | undefined> {
+    const [product] = await db.select().from(products).where(eq(products.id, id));
+    return product;
+  }
+
+  async createProduct(insertProduct: InsertProduct): Promise<Product> {
+    const [product] = await db.insert(products).values(insertProduct).returning();
+    return product;
+  }
+
+  async createOrder(insertOrder: InsertOrder): Promise<Order> {
+    const [order] = await db.insert(orders).values(insertOrder).returning();
+    return order;
+  }
+
+  async getOrder(id: number): Promise<Order | undefined> {
+    const [order] = await db.select().from(orders).where(eq(orders.id, id));
+    return order;
+  }
+
+  async createOrderItem(insertOrderItem: InsertOrderItem): Promise<OrderItem> {
+    const [orderItem] = await db.insert(orderItems).values(insertOrderItem).returning();
+    return orderItem;
+  }
+
+  async getOrderItems(orderId: number): Promise<OrderItem[]> {
+    return await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+  }
+
+  async getAdminByUsername(username: string): Promise<Admin | undefined> {
+    const [admin] = await db.select().from(admins).where(eq(admins.username, username));
+    return admin;
+  }
+
+  async createAdmin(insertAdmin: InsertAdmin): Promise<Admin> {
+    const [admin] = await db.insert(admins).values(insertAdmin).returning();
+    return admin;
+  }
+}
+
 export class MemStorage implements IStorage {
   private products: Map<number, Product>;
   private orders: Map<number, Order>;
@@ -116,6 +161,16 @@ export class MemStorage implements IStorage {
   async getOrderItems(orderId: number): Promise<OrderItem[]> {
     return Array.from(this.orderItems.values()).filter(item => item.orderId === orderId);
   }
+
+  async getAdminByUsername(username: string): Promise<Admin | undefined> {
+    // MemStorage doesn't support admin operations - use DatabaseStorage instead
+    throw new Error("Admin operations not supported in MemStorage");
+  }
+
+  async createAdmin(admin: InsertAdmin): Promise<Admin> {
+    // MemStorage doesn't support admin operations - use DatabaseStorage instead
+    throw new Error("Admin operations not supported in MemStorage");
+  }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

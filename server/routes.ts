@@ -1,8 +1,10 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import cookieParser from "cookie-parser";
 import { storage } from "./storage";
-import { insertOrderSchema, insertOrderItemSchema } from "@shared/schema";
+import { insertOrderSchema, insertOrderItemSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
+import { verifyPassword, createSession, deleteSession, requireAuth, seedAdminUser, cleanExpiredSessions } from "./auth";
 
 const createOrderWithItemsSchema = z.object({
   order: insertOrderSchema,
@@ -10,6 +12,86 @@ const createOrderWithItemsSchema = z.object({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Add cookie parser middleware
+  app.use(cookieParser());
+  
+  // Initialize admin user and clean expired sessions
+  await seedAdminUser();
+  setInterval(cleanExpiredSessions, 60 * 60 * 1000); // Clean every hour
+
+  // Authentication routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const result = loginSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid login data", errors: result.error.errors });
+      }
+
+      const { username, password } = result.data;
+      
+      // Find admin user
+      const admin = await storage.getAdminByUsername(username);
+      if (!admin) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Verify password
+      const isValid = await verifyPassword(password, admin.password);
+      if (!isValid) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Create session
+      const sessionId = await createSession(admin.id);
+      
+      // Set secure cookie
+      res.cookie('admin_session', sessionId, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+      });
+      
+      res.json({ message: "Login successful", admin: { id: admin.id, username: admin.username } });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/admin/logout", async (req, res) => {
+    try {
+      const sessionId = req.cookies.admin_session;
+      
+      if (sessionId) {
+        await deleteSession(sessionId);
+      }
+      
+      res.clearCookie('admin_session');
+      res.json({ message: "Logout successful" });
+    } catch (error) {
+      console.error("Logout error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.get("/api/admin/me", requireAuth, async (req, res) => {
+    try {
+      const adminId = (req as any).adminId;
+      const admin = await storage.getAdminByUsername("admin"); // For now, get the seeded admin
+      
+      if (!admin) {
+        return res.status(404).json({ message: "Admin not found" });
+      }
+      
+      res.json({ id: admin.id, username: admin.username });
+    } catch (error) {
+      console.error("Get admin error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
   // Get all products
   app.get("/api/products", async (req, res) => {
     try {

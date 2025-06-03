@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Request, Response, NextFunction } from 'express';
 import { db } from './db';
 import { admins, sessions } from '@shared/schema';
-import { eq, and, gt } from 'drizzle-orm';
+import { eq, and, gt, lt } from 'drizzle-orm';
 
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 const SALT_ROUNDS = 12;
@@ -48,7 +48,7 @@ export async function deleteSession(sessionId: string): Promise<void> {
 }
 
 export async function cleanExpiredSessions(): Promise<void> {
-  await db.delete(sessions).where(gt(new Date(), sessions.expiresAt));
+  await db.delete(sessions).where(lt(sessions.expiresAt, new Date()));
 }
 
 export async function requireAuth(req: Request, res: Response, next: NextFunction) {
