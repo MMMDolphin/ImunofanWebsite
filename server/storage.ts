@@ -1,4 +1,4 @@
-import { products, orders, orderItems, admins, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type Admin, type InsertAdmin } from "@shared/schema";
+import { products, orders, orderItems, admins, seoKeywords, seoPages, type Product, type InsertProduct, type Order, type InsertOrder, type OrderItem, type InsertOrderItem, type Admin, type InsertAdmin, type SeoKeyword, type InsertSeoKeyword, type SeoPage, type InsertSeoPage } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -19,6 +19,17 @@ export interface IStorage {
   // Admin
   getAdminByUsername(username: string): Promise<Admin | undefined>;
   createAdmin(admin: InsertAdmin): Promise<Admin>;
+  
+  // SEO Keywords
+  createSeoKeyword(keyword: InsertSeoKeyword): Promise<SeoKeyword>;
+  getSeoKeywords(): Promise<SeoKeyword[]>;
+  getSeoKeywordBySlug(slug: string): Promise<SeoKeyword | undefined>;
+  
+  // SEO Pages
+  createSeoPage(page: InsertSeoPage): Promise<SeoPage>;
+  getSeoPages(): Promise<SeoPage[]>;
+  getSeoPageByKeywordId(keywordId: number): Promise<SeoPage | undefined>;
+  updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -63,6 +74,41 @@ export class DatabaseStorage implements IStorage {
   async createAdmin(insertAdmin: InsertAdmin): Promise<Admin> {
     const [admin] = await db.insert(admins).values(insertAdmin).returning();
     return admin;
+  }
+
+  // SEO Keywords
+  async createSeoKeyword(insertKeyword: InsertSeoKeyword): Promise<SeoKeyword> {
+    const [keyword] = await db.insert(seoKeywords).values(insertKeyword).returning();
+    return keyword;
+  }
+
+  async getSeoKeywords(): Promise<SeoKeyword[]> {
+    return await db.select().from(seoKeywords);
+  }
+
+  async getSeoKeywordBySlug(slug: string): Promise<SeoKeyword | undefined> {
+    const [keyword] = await db.select().from(seoKeywords).where(eq(seoKeywords.slug, slug));
+    return keyword;
+  }
+
+  // SEO Pages
+  async createSeoPage(insertPage: InsertSeoPage): Promise<SeoPage> {
+    const [page] = await db.insert(seoPages).values(insertPage).returning();
+    return page;
+  }
+
+  async getSeoPages(): Promise<SeoPage[]> {
+    return await db.select().from(seoPages);
+  }
+
+  async getSeoPageByKeywordId(keywordId: number): Promise<SeoPage | undefined> {
+    const [page] = await db.select().from(seoPages).where(eq(seoPages.keywordId, keywordId));
+    return page;
+  }
+
+  async updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage> {
+    const [page] = await db.update(seoPages).set(updates).where(eq(seoPages.id, id)).returning();
+    return page;
   }
 }
 
@@ -170,6 +216,36 @@ export class MemStorage implements IStorage {
   async createAdmin(admin: InsertAdmin): Promise<Admin> {
     // MemStorage doesn't support admin operations - use DatabaseStorage instead
     throw new Error("Admin operations not supported in MemStorage");
+  }
+
+  // SEO Keywords - not supported in MemStorage
+  async createSeoKeyword(keyword: InsertSeoKeyword): Promise<SeoKeyword> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async getSeoKeywords(): Promise<SeoKeyword[]> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async getSeoKeywordBySlug(slug: string): Promise<SeoKeyword | undefined> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  // SEO Pages - not supported in MemStorage
+  async createSeoPage(page: InsertSeoPage): Promise<SeoPage> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async getSeoPages(): Promise<SeoPage[]> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async getSeoPageByKeywordId(keywordId: number): Promise<SeoPage | undefined> {
+    throw new Error("SEO operations not supported in MemStorage");
+  }
+
+  async updateSeoPage(id: number, updates: Partial<InsertSeoPage>): Promise<SeoPage> {
+    throw new Error("SEO operations not supported in MemStorage");
   }
 }
 

@@ -5,6 +5,9 @@ import { storage } from "./storage";
 import { insertOrderSchema, insertOrderItemSchema, loginSchema } from "@shared/schema";
 import { z } from "zod";
 import { verifyPassword, createSession, deleteSession, requireAuth, seedAdminUser, cleanExpiredSessions } from "./auth";
+import { generateSeoContent, generateSeoImages, createSlugFromKeyword } from "./openai";
+import { csvUploadSchema, insertSeoKeywordSchema } from "@shared/schema";
+import multer from "multer";
 
 async function seedProducts() {
   try {
@@ -138,6 +141,203 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Get admin error:", error);
       res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  // Configure multer for CSV file uploads
+  const upload = multer({ 
+    storage: multer.memoryStorage(),
+    fileFilter: (req, file, cb) => {
+      if (file.mimetype === 'text/csv' || file.originalname.endsWith('.csv')) {
+        cb(null, true);
+      } else {
+        cb(new Error('Only CSV files are allowed'));
+      }
+    },
+    limits: { fileSize: 1024 * 1024 } // 1MB limit
+  });
+
+  // SEO Strategy Writer routes
+  app.post("/api/admin/seo/upload-csv", requireAuth, upload.single('csv'), async (req, res) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ message: "No CSV file uploaded" });
+      }
+
+      const csvContent = req.file.buffer.toString('utf-8');
+      const lines = csvContent.split('\n').filter(line => line.trim());
+      
+      if (lines.length < 2) {
+        return res.status(400).json({ message: "CSV must have at least header and one data row" });
+      }
+
+      const keywords = [];
+      for (let i = 1; i < lines.length; i++) {
+        const [keyword, intent] = lines[i].split(';').map(item => item.trim());
+        if (keyword && intent) {
+          keywords.push({ keyword, intent });
+        }
+      }
+
+      const result = csvUploadSchema.safeParse({ keywords });
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid CSV format", errors: result.error.errors });
+      }
+
+      let processed = 0;
+      let errors = [];
+
+      for (const { keyword, intent } of result.data.keywords) {
+        try {
+          const slug = createSlugFromKeyword(keyword);
+          
+          // Check if keyword already exists
+          const existingKeyword = await storage.getSeoKeywordBySlug(slug);
+          if (existingKeyword) {
+            continue; // Skip duplicates
+          }
+
+          // Create keyword
+          const seoKeyword = await storage.createSeoKeyword({
+            keyword,
+            intent,
+            slug
+          });
+
+          // Generate content and images
+          const [content, images] = await Promise.all([
+            generateSeoContent({ keyword, intent }),
+            generateSeoImages(keyword, intent)
+          ]);
+
+          // Create SEO page
+          await storage.createSeoPage({
+            keywordId: seoKeyword.id,
+            title: content.title,
+            metaDescription: content.metaDescription,
+            content: content.content,
+            image1Url: images.image1Url,
+            image2Url: images.image2Url,
+            published: false
+          });
+
+          processed++;
+        } catch (error) {
+          console.error(`Error processing keyword "${keyword}":`, error);
+          errors.push(`${keyword}: ${error.message}`);
+        }
+      }
+
+      res.json({ 
+        message: `Processed ${processed} keywords successfully`,
+        processed,
+        errors: errors.length > 0 ? errors : undefined
+      });
+    } catch (error) {
+      console.error("CSV upload error:", error);
+      res.status(500).json({ message: "Failed to process CSV file" });
+    }
+  });
+
+  app.get("/api/admin/seo/keywords", requireAuth, async (req, res) => {
+    try {
+      const keywords = await storage.getSeoKeywords();
+      res.json(keywords);
+    } catch (error) {
+      console.error("Error fetching SEO keywords:", error);
+      res.status(500).json({ message: "Failed to fetch keywords" });
+    }
+  });
+
+  app.get("/api/admin/seo/pages", requireAuth, async (req, res) => {
+    try {
+      const pages = await storage.getSeoPages();
+      res.json(pages);
+    } catch (error) {
+      console.error("Error fetching SEO pages:", error);
+      res.status(500).json({ message: "Failed to fetch pages" });
+    }
+  });
+
+  app.patch("/api/admin/seo/pages/:id", requireAuth, async (req, res) => {
+    try {
+      const pageId = parseInt(req.params.id);
+      const updates = req.body;
+      
+      const updatedPage = await storage.updateSeoPage(pageId, updates);
+      res.json(updatedPage);
+    } catch (error) {
+      console.error("Error updating SEO page:", error);
+      res.status(500).json({ message: "Failed to update page" });
+    }
+  });
+
+  app.post("/api/admin/seo/generate-single", requireAuth, async (req, res) => {
+    try {
+      const result = insertSeoKeywordSchema.safeParse(req.body);
+      if (!result.success) {
+        return res.status(400).json({ message: "Invalid keyword data", errors: result.error.errors });
+      }
+
+      const { keyword, intent } = result.data;
+      const slug = createSlugFromKeyword(keyword);
+
+      // Check if keyword already exists
+      const existingKeyword = await storage.getSeoKeywordBySlug(slug);
+      if (existingKeyword) {
+        return res.status(409).json({ message: "Keyword already exists" });
+      }
+
+      // Create keyword
+      const seoKeyword = await storage.createSeoKeyword({
+        keyword,
+        intent,
+        slug
+      });
+
+      // Generate content and images
+      const [content, images] = await Promise.all([
+        generateSeoContent({ keyword, intent }),
+        generateSeoImages(keyword, intent)
+      ]);
+
+      // Create SEO page
+      const seoPage = await storage.createSeoPage({
+        keywordId: seoKeyword.id,
+        title: content.title,
+        metaDescription: content.metaDescription,
+        content: content.content,
+        image1Url: images.image1Url,
+        image2Url: images.image2Url,
+        published: false
+      });
+
+      res.json({ keyword: seoKeyword, page: seoPage });
+    } catch (error) {
+      console.error("Error generating single SEO page:", error);
+      res.status(500).json({ message: "Failed to generate SEO page" });
+    }
+  });
+
+  // Public SEO page route
+  app.get("/seo/:slug", async (req, res) => {
+    try {
+      const { slug } = req.params;
+      
+      const keyword = await storage.getSeoKeywordBySlug(slug);
+      if (!keyword) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+
+      const page = await storage.getSeoPageByKeywordId(keyword.id);
+      if (!page || !page.published) {
+        return res.status(404).json({ message: "Page not found" });
+      }
+
+      res.json({ keyword, page });
+    } catch (error) {
+      console.error("Error fetching SEO page:", error);
+      res.status(500).json({ message: "Failed to fetch page" });
     }
   });
 
