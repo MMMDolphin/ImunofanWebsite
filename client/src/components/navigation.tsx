@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/lib/cart-store";
-import { ShoppingCart, Menu, X, Dna, ChevronDown, Heart, Worm, Baby, Brain, Wind, Shield, Eye, Stethoscope, Users, Leaf, Syringe, PawPrint } from "lucide-react";
+import { ShoppingCart, Menu, X, Dna, ChevronDown, Heart, Worm, Baby, Brain, Wind, Shield, Eye, Stethoscope, Users, Leaf, Syringe, PawPrint, Activity } from "lucide-react";
 
 // Medical applications data for mega menu
 const medicalApplications = [
