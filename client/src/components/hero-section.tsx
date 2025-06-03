@@ -70,7 +70,7 @@ export default function HeroSection() {
               <Button 
                 onClick={scrollToScience}
                 variant="outline"
-                className="border-2 border-white text-white hover:bg-white hover:text-medical-blue font-semibold py-4 px-8 text-lg"
+                className="border-2 border-white text-white font-semibold py-4 px-8 text-lg"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Научните доказателства
