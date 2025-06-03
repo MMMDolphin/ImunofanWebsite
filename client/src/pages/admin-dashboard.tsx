@@ -218,55 +218,257 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => {
-            const Icon = stat.icon;
-            return (
-              <Card key={index} className="relative overflow-hidden">
-                <CardContent className="p-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                        {stat.title}
-                      </p>
-                      <p className="text-3xl font-bold text-gray-900 dark:text-white">
-                        {stat.value}
-                      </p>
+        <Tabs defaultValue="overview" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="keywords">Keywords Sheet</TabsTrigger>
+            <TabsTrigger value="pages">SEO Pages</TabsTrigger>
+            <TabsTrigger value="settings">SEO Settings</TabsTrigger>
+          </TabsList>
+
+          {/* Overview Tab */}
+          <TabsContent value="overview" className="space-y-6">
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {stats.map((stat, index) => {
+                const Icon = stat.icon;
+                return (
+                  <Card key={index} className="relative overflow-hidden">
+                    <CardContent className="p-6">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                            {stat.title}
+                          </p>
+                          <p className="text-3xl font-bold text-gray-900 dark:text-white">
+                            {stat.value}
+                          </p>
+                        </div>
+                        <div className={`p-3 rounded-lg ${stat.color}`}>
+                          <Icon className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+
+            {/* SEO Strategy Writer Card */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <TrendingUp className="w-5 h-5" />
+                  SEO Strategy Writer
+                </CardTitle>
+                <CardDescription>
+                  Generate AI-powered SEO content and images using OpenAI GPT-4o
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  Upload CSV files with keywords and intents to automatically generate SEO-optimized pages with custom content and images for Imunofan pharmaceutical products.
+                </p>
+                <Button
+                  onClick={() => window.location.href = "/admin/seo-strategy"}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  Open SEO Strategy Writer
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Keywords Sheet Tab */}
+          <TabsContent value="keywords" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="w-5 h-5" />
+                  Keywords Database
+                </CardTitle>
+                <CardDescription>
+                  View and manage all SEO keywords uploaded via CSV
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {typedKeywords.length === 0 ? (
+                  <div className="text-center py-8">
+                    <FileText className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 dark:text-gray-400">No keywords uploaded yet</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-500">Upload a CSV file in the SEO Strategy Writer to see keywords here</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>ID</TableHead>
+                          <TableHead>Keyword</TableHead>
+                          <TableHead>Intent</TableHead>
+                          <TableHead>Slug</TableHead>
+                          <TableHead>Created</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {typedKeywords.map((keyword: any) => (
+                          <TableRow key={keyword.id}>
+                            <TableCell className="font-medium">{keyword.id}</TableCell>
+                            <TableCell>{keyword.keyword}</TableCell>
+                            <TableCell>{keyword.intent}</TableCell>
+                            <TableCell className="font-mono text-sm">{keyword.slug}</TableCell>
+                            <TableCell>{new Date(keyword.createdAt).toLocaleDateString()}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* SEO Pages Tab */}
+          <TabsContent value="pages" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Generated SEO Pages</CardTitle>
+                <CardDescription>
+                  Manage AI-generated content for each keyword
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {typedPages.length === 0 ? (
+                  <div className="text-center py-8">
+                    <TrendingUp className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-600 dark:text-gray-400">No SEO pages generated yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>ID</TableHead>
+                          <TableHead>Title</TableHead>
+                          <TableHead>Meta Description</TableHead>
+                          <TableHead>Published</TableHead>
+                          <TableHead>Created</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {typedPages.map((page: any) => (
+                          <TableRow key={page.id}>
+                            <TableCell className="font-medium">{page.id}</TableCell>
+                            <TableCell className="max-w-xs truncate">{page.title}</TableCell>
+                            <TableCell className="max-w-sm truncate">{page.metaDescription}</TableCell>
+                            <TableCell>
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                page.published 
+                                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+                              }`}>
+                                {page.published ? 'Published' : 'Draft'}
+                              </span>
+                            </TableCell>
+                            <TableCell>{new Date(page.createdAt).toLocaleDateString()}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* SEO Settings Tab */}
+          <TabsContent value="settings" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Settings className="w-5 h-5" />
+                  SEO Management Settings
+                </CardTitle>
+                <CardDescription>
+                  Control daily page creation limits and automation settings
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="space-y-4">
+                  <h3 className="text-lg font-medium">Daily Page Creation Limits</h3>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="dailyLimit">Daily Limit</Label>
+                      <Input
+                        id="dailyLimit"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value={seoSettings?.dailyPageLimit || dailyLimit}
+                        onChange={(e) => setDailyLimit(parseInt(e.target.value))}
+                        placeholder="10"
+                      />
                     </div>
-                    <div className={`p-3 rounded-lg ${stat.color}`}>
-                      <Icon className="w-6 h-6 text-white" />
+                    
+                    <div className="space-y-2">
+                      <Label>Pages Created Today</Label>
+                      <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800 rounded">
+                        <span className="text-2xl font-bold text-blue-600">
+                          {seoSettings?.pagesCreatedToday || 0}
+                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400">
+                          / {seoSettings?.dailyPageLimit || 10}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label>Last Reset</Label>
+                      <div className="p-2 bg-gray-50 dark:bg-gray-800 rounded text-sm">
+                        {seoSettings?.lastResetDate 
+                          ? new Date(seoSettings.lastResetDate).toLocaleDateString()
+                          : 'Not set'
+                        }
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
 
-        {/* SEO Strategy Writer Card */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5" />
-              SEO Strategy Writer
-            </CardTitle>
-            <CardDescription>
-              Generate AI-powered SEO content and images using OpenAI GPT-4o
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-              Upload CSV files with keywords and intents to automatically generate SEO-optimized pages with custom content and images for Imunofan pharmaceutical products.
-            </p>
-            <Button
-              onClick={() => window.location.href = "/admin/seo-strategy"}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              Open SEO Strategy Writer
-            </Button>
-          </CardContent>
-        </Card>
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      id="autoGeneration"
+                      checked={seoSettings?.autoGeneration !== undefined ? seoSettings.autoGeneration : autoGeneration}
+                      onCheckedChange={setAutoGeneration}
+                    />
+                    <Label htmlFor="autoGeneration">Enable automatic page generation</Label>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <Button
+                      onClick={() => updateSettingsMutation.mutate({
+                        dailyPageLimit: dailyLimit,
+                        autoGeneration: autoGeneration
+                      })}
+                      disabled={updateSettingsMutation.isPending}
+                    >
+                      <Settings className="w-4 h-4 mr-2" />
+                      {updateSettingsMutation.isPending ? 'Updating...' : 'Update Settings'}
+                    </Button>
+                    
+                    <Button
+                      variant="outline"
+                      onClick={() => resetDailyMutation.mutate()}
+                      disabled={resetDailyMutation.isPending}
+                    >
+                      <RotateCcw className="w-4 h-4 mr-2" />
+                      {resetDailyMutation.isPending ? 'Resetting...' : 'Reset Daily Count'}
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
 
         {/* Product Management */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
