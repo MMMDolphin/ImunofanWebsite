@@ -188,6 +188,10 @@ export default function Navigation() {
               )}
             </div>
             
+            <Link href="/symptoms" className="text-gray-600 hover:text-medical-blue transition-colors">
+              Симптоми
+            </Link>
+            
             <button 
               onClick={() => scrollToSection('testimonials')}
               className="text-gray-600 hover:text-medical-blue transition-colors"
@@ -270,6 +274,14 @@ export default function Navigation() {
                 </Link>
               </div>
             </div>
+            
+            <Link 
+              href="/symptoms" 
+              className="block w-full text-left px-3 py-2 text-gray-600 hover:text-medical-blue"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Симптоми
+            </Link>
             
             <button 
               onClick={() => scrollToSection('testimonials')}
