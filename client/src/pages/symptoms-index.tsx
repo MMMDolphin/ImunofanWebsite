@@ -6,7 +6,7 @@ import ShoppingCart from "@/components/shopping-cart";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Search, Heart, Wind, Brain, Stethoscope, Activity, Thermometer } from "lucide-react";
+import { Search, Heart, Wind, Brain, Stethoscope, Activity, Thermometer, AlertCircle } from "lucide-react";
 
 const symptoms = [
   {
@@ -140,6 +140,138 @@ const symptoms = [
     image: "/src/assets/symptoms/кашлица1.avif",
     seoTitle: "Кашлица - Видове, Причини и Лечение | Имунофан",
     seoDescription: "Разберете за различните видове кашлица и как Имунофан подпомага при продължителна кашлица."
+  },
+  {
+    id: "akne",
+    name: "Акне",
+    description: "Възпалителни кожни поражения - причини и имунна модулация",
+    type: "Info",
+    category: "Кожни заболявания",
+    icon: Heart,
+    image: "/src/assets/symptoms/акне-1.avif",
+    seoTitle: "Акне - Причини, Лечение и Профилактика | Имунофан",
+    seoDescription: "Разберете за причините за акне и как имунната модулация с Имунофан помага при кожни възпаления."
+  },
+  {
+    id: "bolka-gardi",
+    name: "Болка в гърдите",
+    description: "Дихателни проблеми и болка в гърдите - диагностика и лечение",
+    type: "Info + Comm",
+    category: "Дихателна система",
+    icon: Activity,
+    image: "/src/assets/symptoms/болка в гърдите1.avif",
+    seoTitle: "Болка в Гърдите - Причини и Лечение | Имунофан",
+    seoDescription: "Научете за причините за болка в гърдите свързани с дихателни проблеми и как Имунофан подпомага."
+  },
+  {
+    id: "bolki-stomah",
+    name: "Болки в стомаха",
+    description: "Стомашно-чревни разстройства и имунна защита",
+    type: "Info + Comm",
+    category: "Храносмилателна система",
+    icon: AlertCircle,
+    image: "/src/assets/symptoms/болки-в-стомаха1.avif",
+    seoTitle: "Болки в Стомаха - Причини и Лечение | Имунофан",
+    seoDescription: "Разберете за стомашно-чревните проблеми и как Имунофан подкрепя храносмилателния имунитет."
+  },
+  {
+    id: "fronzit",
+    name: "Фронзит",
+    description: "Възпаление на челните синуси - симптоми и лечение",
+    type: "Info + Comm",
+    category: "Дихателна система",
+    icon: Brain,
+    image: "/src/assets/symptoms/фронзит1.avif",
+    seoTitle: "Фронзит - Симптоми, Причини и Лечение | Имунофан",
+    seoDescription: "Научете за фронзита, симптомите и как Имунофан помага при синузни инфекции."
+  },
+  {
+    id: "depresiya",
+    name: "Депресия",
+    description: "Психоемоционални разстройства и имунна система",
+    type: "Info",
+    category: "Неврологични проблеми",
+    icon: Brain,
+    image: "/src/assets/symptoms/депресия1.avif",
+    seoTitle: "Депресия и Имунитет - Връзка и Лечение | Имунофан",
+    seoDescription: "Разберете за връзката между депресията и имунната система и как Имунофан може да помогне."
+  },
+  {
+    id: "dermatit",
+    name: "Дерматит",
+    description: "Възпалителни кожни заболявания - видове и лечение",
+    type: "Info",
+    category: "Кожни заболявания",
+    icon: Heart,
+    image: "/src/assets/symptoms/дерматит1.avif",
+    seoTitle: "Дерматит - Видове, Причини и Лечение | Имунофан",
+    seoDescription: "Научете за различните видове дерматит и как Имунофан помага при кожни възпаления."
+  },
+  {
+    id: "zapek",
+    name: "Запек",
+    description: "Хронични стомашно-чревни проблеми и възстановяване",
+    type: "Info + Comm",
+    category: "Храносмилателна система",
+    icon: AlertCircle,
+    image: "/src/assets/symptoms/запек1.avif",
+    seoTitle: "Запек - Причини, Лечение и Профилактика | Имунофан",
+    seoDescription: "Разберете за причините за запек и как Имунофан подкрепя храносмилателното здраве."
+  },
+  {
+    id: "migrena",
+    name: "Мигрена",
+    description: "Главоболие и неврологични симптоми - управление и лечение",
+    type: "Info",
+    category: "Неврологични проблеми",
+    icon: Brain,
+    image: "/src/assets/symptoms/мигрена-1.avif",
+    seoTitle: "Мигрена - Симптоми, Причини и Лечение | Имунофан",
+    seoDescription: "Научете за мигрената, trigger факторите и как Имунофан може да помогне при неврологични проблеми."
+  },
+  {
+    id: "panik-ataki",
+    name: "Панически атаки",
+    description: "Тревожни разстройства и стрес - управление и подкрепа",
+    type: "Info + Comm",
+    category: "Неврологични проблеми",
+    icon: AlertCircle,
+    image: "/src/assets/symptoms/паник атаки1.avif",
+    seoTitle: "Панически Атаки - Симптоми и Лечение | Имунофан",
+    seoDescription: "Разберете за паническите атаки, тревожността и как Имунофан подкрепя нервната система."
+  },
+  {
+    id: "poduvane-korem",
+    name: "Подуване на корема",
+    description: "Храносмилателни проблеми и дискомфорт - причини и решения",
+    type: "Info + Comm",
+    category: "Храносмилателна система",
+    icon: AlertCircle,
+    image: "/src/assets/symptoms/подуване-на-корем-1.avif",
+    seoTitle: "Подуване на Корема - Причини и Лечение | Имунофан",
+    seoDescription: "Научете за причините за подуване на корема и как Имунофан помага при храносмилателни проблеми."
+  },
+  {
+    id: "sinuzit",
+    name: "Синузит",
+    description: "Възпаление на синусите - остри и хронични форми",
+    type: "Info + Comm",
+    category: "Дихателна система",
+    icon: Wind,
+    image: "/src/assets/symptoms/синузит1.avif",
+    seoTitle: "Синузит - Симптоми, Причини и Лечение | Имунофан",
+    seoDescription: "Разберете за синузита, видовете и как Имунофан подпомага при синузни инфекции."
+  },
+  {
+    id: "trevozhnost",
+    name: "Тревожност",
+    description: "Хронична тревожност и стрес - психоемоционална подкрепа",
+    type: "Info",
+    category: "Неврологични проблеми",
+    icon: Brain,
+    image: "/src/assets/symptoms/тревожност1.avif",
+    seoTitle: "Тревожност - Управление и Лечение | Имунофан",
+    seoDescription: "Научете за тревожността, стреса и как Имунофан може да подкрепи психоемоционалното здраве."
   },
   {
     id: "poduvane-na-korema",
