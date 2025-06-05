@@ -16,7 +16,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Wind,
-    image: "/src/assets/symptoms/бронхит1.avif",
+    image: "/symptoms/бронхит1.avif",
     seoTitle: "Бронхит - Причини, Симптоми и Лечение | Имунофан",
     seoDescription: "Научете за видовете бронхит, ролята на имунитета и как Имунофан подпомага защитата при дихателни инфекции."
   },
@@ -27,7 +27,7 @@ const symptoms = [
     type: "Info",
     category: "Кожни заболявания",
     icon: Heart,
-    image: "/src/assets/symptoms/екзема1.avif",
+    image: "/symptoms/екзема1.avif",
     seoTitle: "Екзема - Типове, Причини и Лечение | Имунофан",
     seoDescription: "Разберете за типовете екзема, причините и как Имунофан помага при имунно-медиирани кожни проблеми."
   },
@@ -38,7 +38,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Thermometer,
-    image: "/src/assets/symptoms/ларингит1.avif",
+    image: "/symptoms/ларингит1.avif",
     seoTitle: "Ларингит - Причини, Симптоми и Профилактика | Имунофан",
     seoDescription: "Научете за ларингита, защо се повтаря често и как Имунофан подпомага при чести възпаления."
   },
@@ -49,7 +49,7 @@ const symptoms = [
     type: "Info",
     category: "Общи симптоми",
     icon: Heart,
-    image: "/src/assets/symptoms/болка-в-гърдите1.avif",
+    image: "/symptoms/болка-в-гърдите1.avif",
     seoTitle: "Болка в Гърдите - Причини и Кога да Потърсите Помощ",
     seoDescription: "Разберете основните причини за болка в гърдите и кога е необходима медицинска консултация."
   },
@@ -60,7 +60,7 @@ const symptoms = [
     type: "Info",
     category: "Кожни заболявания",
     icon: Activity,
-    image: "/src/assets/symptoms/дерматит1.avif",
+    image: "/symptoms/дерматит1.avif",
     seoTitle: "Дерматит - Видове, Причини и Лечение | Имунофан",
     seoDescription: "Научете за различните видове дерматит и как Имунофан подкрепя кожната бариера."
   },
@@ -71,7 +71,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Храносмилателна система",
     icon: Activity,
-    image: "/src/assets/symptoms/запек1.avif",
+    image: "/symptoms/запек1.avif",
     seoTitle: "Запек - Причини, Профилактика и Лечение",
     seoDescription: "Разберете причините за запек и как общият имунен баланс влияе на стомашно-чревния тракт."
   },
@@ -82,7 +82,7 @@ const symptoms = [
     type: "Info",
     category: "Психично здраве",
     icon: Brain,
-    image: "/src/assets/symptoms/панични-атаки1.avif",
+    image: "/symptoms/панични-атаки1.avif",
     seoTitle: "Панични Атаки - Симптоми, Причини и Лечение",
     seoDescription: "Научете за паничните атаки, техните симптоми и как да се справите с тях."
   },
@@ -93,7 +93,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Stethoscope,
-    image: "/src/assets/symptoms/синузит1.avif",
+    image: "/symptoms/синузит1.avif",
     seoTitle: "Синузит - Симптоми, Лечение и Профилактика | Имунофан",
     seoDescription: "Разберете за синузита и как Имунофан подкрепя естествената защита срещу инфекции."
   },
@@ -104,7 +104,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Храносмилателна система",
     icon: Activity,
-    image: "/src/assets/symptoms/болки-в-стомаха1.avif",
+    image: "/symptoms/болки-в-стомаха1.avif",
     seoTitle: "Болки в Стомаха - Причини и Лечение",
     seoDescription: "Научете за причините за стомашни болки и кога Имунофан може да е част от терапията."
   },
@@ -115,7 +115,7 @@ const symptoms = [
     type: "Info",
     category: "Неврология",
     icon: Brain,
-    image: "/src/assets/symptoms/мигрена1.avif",
+    image: "/symptoms/мигрена1.avif",
     seoTitle: "Мигрена - Симптоми, Тригери и Лечение",
     seoDescription: "Разберете за мигрената, нейните тригери и съвременните подходи за лечение."
   },
@@ -126,7 +126,7 @@ const symptoms = [
     type: "Info",
     category: "Психично здраве",
     icon: Brain,
-    image: "/src/assets/symptoms/депресия1.avif",
+    image: "/symptoms/депресия1.avif",
     seoTitle: "Депресия - Причини, Симптоми и Лечение",
     seoDescription: "Научете за депресията и ролята на възпалението в психичното здраве."
   },
@@ -137,7 +137,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Wind,
-    image: "/src/assets/symptoms/кашлица1.avif",
+    image: "/symptoms/кашлица1.avif",
     seoTitle: "Кашлица - Видове, Причини и Лечение | Имунофан",
     seoDescription: "Разберете за различните видове кашлица и как Имунофан подпомага при продължителна кашлица."
   },
@@ -148,7 +148,7 @@ const symptoms = [
     type: "Info",
     category: "Кожни заболявания",
     icon: Heart,
-    image: "/src/assets/symptoms/акне-1.avif",
+    image: "/symptoms/акне-1.avif",
     seoTitle: "Акне - Причини, Лечение и Профилактика | Имунофан",
     seoDescription: "Разберете за причините за акне и как имунната модулация с Имунофан помага при кожни възпаления."
   },
@@ -159,7 +159,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Activity,
-    image: "/src/assets/symptoms/болка в гърдите1.avif",
+    image: "/symptoms/болка в гърдите1.avif",
     seoTitle: "Болка в Гърдите - Причини и Лечение | Имунофан",
     seoDescription: "Научете за причините за болка в гърдите свързани с дихателни проблеми и как Имунофан подпомага."
   },
@@ -170,7 +170,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Храносмилателна система",
     icon: AlertCircle,
-    image: "/src/assets/symptoms/болки-в-стомаха1.avif",
+    image: "/symptoms/болки-в-стомаха1.avif",
     seoTitle: "Болки в Стомаха - Причини и Лечение | Имунофан",
     seoDescription: "Разберете за стомашно-чревните проблеми и как Имунофан подкрепя храносмилателния имунитет."
   },
@@ -181,7 +181,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Brain,
-    image: "/src/assets/symptoms/фронзит1.avif",
+    image: "/symptoms/фронзит1.avif",
     seoTitle: "Фронзит - Симптоми, Причини и Лечение | Имунофан",
     seoDescription: "Научете за фронзита, симптомите и как Имунофан помага при синузни инфекции."
   },
@@ -192,7 +192,7 @@ const symptoms = [
     type: "Info",
     category: "Неврологични проблеми",
     icon: Brain,
-    image: "/src/assets/symptoms/депресия1.avif",
+    image: "/symptoms/депресия1.avif",
     seoTitle: "Депресия и Имунитет - Връзка и Лечение | Имунофан",
     seoDescription: "Разберете за връзката между депресията и имунната система и как Имунофан може да помогне."
   },
@@ -203,7 +203,7 @@ const symptoms = [
     type: "Info",
     category: "Кожни заболявания",
     icon: Heart,
-    image: "/src/assets/symptoms/дерматит1.avif",
+    image: "/symptoms/дерматит1.avif",
     seoTitle: "Дерматит - Видове, Причини и Лечение | Имунофан",
     seoDescription: "Научете за различните видове дерматит и как Имунофан помага при кожни възпаления."
   },
@@ -214,7 +214,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Храносмилателна система",
     icon: AlertCircle,
-    image: "/src/assets/symptoms/запек1.avif",
+    image: "/symptoms/запек1.avif",
     seoTitle: "Запек - Причини, Лечение и Профилактика | Имунофан",
     seoDescription: "Разберете за причините за запек и как Имунофан подкрепя храносмилателното здраве."
   },
@@ -225,7 +225,7 @@ const symptoms = [
     type: "Info",
     category: "Неврологични проблеми",
     icon: Brain,
-    image: "/src/assets/symptoms/мигрена-1.avif",
+    image: "/symptoms/мигрена-1.avif",
     seoTitle: "Мигрена - Симптоми, Причини и Лечение | Имунофан",
     seoDescription: "Научете за мигрената, trigger факторите и как Имунофан може да помогне при неврологични проблеми."
   },
@@ -236,7 +236,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Неврологични проблеми",
     icon: AlertCircle,
-    image: "/src/assets/symptoms/паник атаки1.avif",
+    image: "/symptoms/паник атаки1.avif",
     seoTitle: "Панически Атаки - Симптоми и Лечение | Имунофан",
     seoDescription: "Разберете за паническите атаки, тревожността и как Имунофан подкрепя нервната система."
   },
@@ -247,7 +247,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Храносмилателна система",
     icon: AlertCircle,
-    image: "/src/assets/symptoms/подуване-на-корем-1.avif",
+    image: "/symptoms/подуване-на-корем-1.avif",
     seoTitle: "Подуване на Корема - Причини и Лечение | Имунофан",
     seoDescription: "Научете за причините за подуване на корема и как Имунофан помага при храносмилателни проблеми."
   },
@@ -258,7 +258,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Дихателна система",
     icon: Wind,
-    image: "/src/assets/symptoms/синузит1.avif",
+    image: "/symptoms/синузит1.avif",
     seoTitle: "Синузит - Симптоми, Причини и Лечение | Имунофан",
     seoDescription: "Разберете за синузита, видовете и как Имунофан подпомага при синузни инфекции."
   },
@@ -269,7 +269,7 @@ const symptoms = [
     type: "Info",
     category: "Неврологични проблеми",
     icon: Brain,
-    image: "/src/assets/symptoms/тревожност1.avif",
+    image: "/symptoms/тревожност1.avif",
     seoTitle: "Тревожност - Управление и Лечение | Имунофан",
     seoDescription: "Научете за тревожността, стреса и как Имунофан може да подкрепи психоемоционалното здраве."
   },
@@ -280,7 +280,7 @@ const symptoms = [
     type: "Info",
     category: "Храносмилателна система",
     icon: Activity,
-    image: "/src/assets/symptoms/подуване-на-корема1.avif",
+    image: "/symptoms/подуване-на-корема1.avif",
     seoTitle: "Подуване на Корема - Причини и Решения",
     seoDescription: "Научете за причините за подуване на корема и как да се справите с този проблем."
   },
@@ -291,7 +291,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Психично здраве",
     icon: Brain,
-    image: "/src/assets/symptoms/тревожност1.avif",
+    image: "/symptoms/тревожност1.avif",
     seoTitle: "Тревожност - Симптоми, Причини и Лечение",
     seoDescription: "Разберете за тревожността и ролята на имунната регулация за психо-емоционалния баланс."
   },
@@ -302,7 +302,7 @@ const symptoms = [
     type: "Info + Comm",
     category: "Кожни заболявания",
     icon: Activity,
-    image: "/src/assets/symptoms/акне1.avif",
+    image: "/symptoms/акне1.avif",
     seoTitle: "Акне - Причини, Видове и Лечение | Имунофан",
     seoDescription: "Научете за акнето и ролята на Имунофан при възпалително акне с имунен дисбаланс."
   }

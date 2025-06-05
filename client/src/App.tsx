@@ -10,6 +10,9 @@ import Applications from "@/pages/applications";
 import ApplicationsIndex from "@/pages/applications-index";
 import SymptomsIndex from "@/pages/symptoms-index";
 import SymptomPage from "@/pages/symptom-page";
+import Shop from "@/pages/shop";
+import Nauka from "@/pages/nauka";
+import Otzivy from "@/pages/otzivy";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,7 +20,11 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/product/:id" component={Product} />
+      <Route path="/продукт/:slug" component={Product} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/shop" component={Shop} />
+      <Route path="/nauka" component={Nauka} />
+      <Route path="/otzivy" component={Otzivy} />
       <Route path="/applications" component={ApplicationsIndex} />
       <Route path="/applications/:field" component={Applications} />
       <Route path="/symptoms" component={SymptomsIndex} />

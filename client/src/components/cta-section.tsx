@@ -42,14 +42,15 @@ export default function CtaSection() {
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
           <Button 
             onClick={scrollToProducts}
-            className="bg-white text-medical-blue hover:bg-gray-100 font-bold py-4 px-8 text-lg"
+            size="lg"
+            className="bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700 font-bold py-4 px-8 text-lg shadow-lg border-2 border-white"
           >
             <ShoppingCart className="w-5 h-5 mr-2" />
             Поръчай сега
           </Button>
           <Button 
-            variant="outline"
-            className="border-2 border-white text-white hover:bg-white hover:text-medical-blue font-bold py-4 px-8 text-lg"
+            size="lg"
+            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold py-4 px-8 text-lg shadow-lg"
           >
             <Phone className="w-5 h-5 mr-2" />
             Безплатна консултация

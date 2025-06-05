@@ -219,7 +219,7 @@ export default function ApplicationsIndex() {
               <Button className="bg-medical-blue hover:bg-blue-700 text-white font-semibold py-3 px-8">
                 Безплатна консултация
               </Button>
-              <Link href="/product/1">
+              <Link href="/shop">
                 <Button variant="outline" className="border-medical-blue text-medical-blue hover:bg-medical-blue hover:text-white py-3 px-8">
                   Вижте продуктите
                 </Button>

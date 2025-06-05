@@ -56,8 +56,8 @@ export default function ThreePhases() {
           <div className="lg:col-span-7">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1582719471384-894fbb16e074?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500" 
-                alt="Laboratory equipment for pharmaceutical research" 
+                src="/phase-1.webp" 
+                alt="Имунофан Фаза 1 - Детоксикация и антиоксидантна защита" 
                 className="rounded-2xl shadow-xl w-full h-80 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent rounded-2xl"></div>
@@ -68,8 +68,8 @@ export default function ThreePhases() {
           <div className="lg:col-span-7 lg:order-3">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500" 
-                alt="Brain research and neuroscience" 
+                src="/phase-2.webp" 
+                alt="Имунофан Фаза 2 - Активиране на фагоцитозата" 
                 className="rounded-2xl shadow-xl w-full h-80 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-l from-black/20 to-transparent rounded-2xl"></div>
@@ -158,8 +158,8 @@ export default function ThreePhases() {
           <div className="lg:col-span-7 lg:order-6">
             <div className="relative">
               <img 
-                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500" 
-                alt="Brain anatomy and immune system research" 
+                src="/phase-3.webp" 
+                alt="Имунофан Фаза 3 - Възстановяване на имунитета" 
                 className="rounded-2xl shadow-xl w-full h-80 object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent rounded-2xl"></div>

@@ -1,5 +1,5 @@
 import { useParams } from "wouter";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import Navigation from "@/components/navigation";
 import Footer from "@/components/footer";
 import ShoppingCart from "@/components/shopping-cart";
@@ -8,32 +8,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useCartStore } from "@/lib/cart-store";
 import { CheckCircle } from "lucide-react";
-import type { Product } from "@shared/schema";
+import { getProductBySlug, getProductById } from "@/lib/products";
 
 export default function ProductPage() {
-  const { id } = useParams();
+  const { id, slug } = useParams();
   const addItem = useCartStore(state => state.addItem);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   
-  const { data: product, isLoading, error } = useQuery<Product>({
-    queryKey: [`/api/products/${id}`],
-    enabled: !!id,
-  });
+  // Get product by slug (Bulgarian URL) or fallback to ID
+  const product = slug ? getProductBySlug(slug) : (id ? getProductById(parseInt(id)) : null);
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <Navigation />
-        <div className="flex items-center justify-center min-h-[50vh]">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-medical-blue mx-auto"></div>
-            <p className="mt-4 text-gray-600">Зареждане на продукт...</p>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error || !product) {
+  if (!product) {
     return (
       <div className="min-h-screen bg-background">
         <Navigation />
@@ -56,19 +41,45 @@ export default function ProductPage() {
     });
   };
 
+  // Images for gallery (use images array if available, otherwise fallback to single image)
+  const productImages = product.images || [product.image];
+
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
       
+      {/* SEO Meta tags would go here in a real implementation */}
       <div className="pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             <div>
+              {/* Main Product Image */}
               <img 
-                src={product.image} 
+                src={productImages[selectedImageIndex]} 
                 alt={product.name}
-                className="w-full h-96 object-cover rounded-2xl shadow-lg"
+                className="w-full h-96 object-cover rounded-2xl shadow-lg mb-4"
               />
+              
+              {/* Image Gallery Thumbnails */}
+              {productImages.length > 1 && (
+                <div className="flex space-x-2 overflow-x-auto">
+                  {productImages.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors ${
+                        selectedImageIndex === index ? 'border-medical-blue' : 'border-gray-200'
+                      }`}
+                    >
+                      <img 
+                        src={image} 
+                        alt={`${product.name} - изглед ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             
             <div>
@@ -76,6 +87,10 @@ export default function ProductPage() {
                 {product.type === 'injection' && 'Инжекционен разтвор'}
                 {product.type === 'nasal' && 'Назален спрей'}
                 {product.type === 'suppository' && 'Ректални супозитории'}
+                {product.type === 'tablets' && 'Орални таблетки'}
+                {product.type === 'gel' && 'Гел за местно приложение'}
+                {product.type === 'drops' && 'Орални капки'}
+                {product.type === 'kit' && 'Комплект продукти'}
               </Badge>
               
               <h1 className="font-montserrat text-4xl font-bold text-foreground mb-6">
@@ -85,6 +100,23 @@ export default function ProductPage() {
               <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                 {product.description}
               </p>
+              
+              {/* Special Benefits Section for Suppository */}
+              {product.benefits && (
+                <div className="mb-8 p-6 bg-gradient-to-r from-green-50 to-blue-50 rounded-xl border border-green-200">
+                  <h3 className="font-montserrat text-xl font-semibold mb-4 text-green-800">
+                    🏆 ЗАЩО СА НАЙ-ЕФЕКТИВНИ:
+                  </h3>
+                  <div className="space-y-3">
+                    {product.benefits.map((benefit, index) => (
+                      <div key={index} className="flex items-start space-x-3">
+                        <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                        <span className="text-green-700 font-medium">{benefit}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <div className="mb-8">
                 <h3 className="font-montserrat text-xl font-semibold mb-4">Предимства:</h3>
@@ -105,7 +137,12 @@ export default function ProductPage() {
                       <div className="text-3xl font-bold text-medical-blue mb-2">
                         {parseFloat(product.price).toFixed(2)} лв.
                       </div>
-                      <div className="text-sm text-gray-600">
+                      {product.originalPrice && (
+                        <div className="text-lg text-gray-500 line-through">
+                          {parseFloat(product.originalPrice).toFixed(2)} лв.
+                        </div>
+                      )}
+                      <div className="text-sm text-gray-600 mt-1">
                         {product.inStock ? 'В наличност' : 'Няма в наличност'}
                       </div>
                     </div>

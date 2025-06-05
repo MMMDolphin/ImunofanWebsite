@@ -560,7 +560,7 @@ export default function Applications() {
                         </div>
                         
                         <div className="mt-6">
-                          <Link href="/product/1">
+                          <Link href="/shop">
                             <Button className="w-full bg-medical-blue hover:bg-blue-700">
                               Вижте продуктите
                               <ExternalLink className="w-4 h-4 ml-2" />

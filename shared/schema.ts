@@ -23,6 +23,18 @@ export const orders = pgTable("orders", {
   postalCode: text("postal_code").notNull(),
   total: decimal("total", { precision: 10, scale: 2 }).notNull(),
   status: text("status").notNull().default("pending"),
+  paymentMethod: text("payment_method").notNull(),
+  paymentIntentId: text("payment_intent_id"),
+  stripePaymentStatus: text("stripe_payment_status"),
+  
+  // Delivery information
+  deliveryType: text("delivery_type"), // 'office', 'home', 'fast'
+  deliveryPrice: decimal("delivery_price", { precision: 10, scale: 2 }),
+  econtOfficeId: text("econt_office_id"),
+  econtOfficeName: text("econt_office_name"),
+  trackingNumber: text("tracking_number"),
+  deliveryStatus: text("delivery_status").default("pending"),
+  
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
@@ -38,7 +50,12 @@ export const insertProductSchema = createInsertSchema(products).omit({
   id: true,
 });
 
-export const insertOrderSchema = createInsertSchema(orders).omit({
+export const insertOrderSchema = createInsertSchema(orders, {
+  status: z.enum(['pending', 'paid', 'failed', 'shipped', 'delivered', 'cancelled', 'pending_cash_on_delivery']),
+  paymentMethod: z.enum(['stripe', 'econt_cod']),
+  deliveryType: z.enum(['office', 'home', 'fast']).optional().nullable(),
+  deliveryStatus: z.enum(['pending', 'shipped', 'delivered', 'failed']).optional().nullable(),
+}).omit({
   id: true,
   createdAt: true,
 });

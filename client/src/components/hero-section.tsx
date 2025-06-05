@@ -36,8 +36,7 @@ export default function HeroSection() {
             </Badge>
             
             <h1 className="font-montserrat text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-              Първият истински
-              <span className="block text-biotech-teal">ИМУНОМОДУЛАТОР</span>
+              Решението на всички имунни проблеми
             </h1>
             
             <p className="text-xl mb-8 text-white/90 leading-relaxed">
@@ -63,14 +62,15 @@ export default function HeroSection() {
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Button 
                 onClick={scrollToProducts}
-                className="bg-energy-orange hover:bg-orange-600 text-white font-semibold py-4 px-8 text-lg"
+                size="lg"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 px-8 text-lg shadow-lg"
               >
                 Поръчай сега
               </Button>
               <Button 
                 onClick={scrollToScience}
-                variant="outline"
-                className="border-2 border-white text-white font-semibold py-4 px-8 text-lg"
+                size="lg"
+                className="bg-white text-blue-600 hover:bg-gray-100 hover:text-blue-700 font-semibold py-4 px-8 text-lg shadow-lg border-2 border-white"
               >
                 <Play className="w-4 h-4 mr-2" />
                 Научните доказателства
@@ -91,8 +91,8 @@ export default function HeroSection() {
           
           <div className="relative">
             <img 
-              src="https://images.unsplash.com/photo-1559757175-0eb30cd8c063?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=600" 
-              alt="Medical research scientists" 
+              src="/imunofan-ekip.webp" 
+              alt="Екипът на Имунофан" 
               className="rounded-2xl shadow-2xl w-full"
             />
             
